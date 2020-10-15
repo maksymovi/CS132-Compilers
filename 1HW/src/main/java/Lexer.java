@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Lexer {
 	public static enum Terminals {leftBrace, rightBrace, SOP, openParen, closeParen, semicolon, ifStatement, elseStatement, whileStatement, trueStatement, falseStatement, exclamation}
+	public static enum Nonterminals {S, L, E} 
 	public static void main(String [ ] args) {
 		ArrayList<Terminals> terms = lex("");
 		if(terms.isEmpty())
