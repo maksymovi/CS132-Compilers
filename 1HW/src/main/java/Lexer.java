@@ -6,25 +6,28 @@ public class Lexer {
 	public static enum Terminals {leftBrace, rightBrace, SOP, openParen, closeParen, semicolon, ifStatement, elseStatement, whileStatement, trueStatement, falseStatement, exclamation}
 	public static void main(String [ ] args) {
 		ArrayList<Terminals> terms = lex("");
-		if(terms == null)
+		if(terms.isEmpty())
 		{
 			System.out.println("Error");
 		}
-		for(Terminals t : terms)
-		{
-			System.out.println(t.name());
-		}
+		else
+			for(Terminals t : terms)
+			{
+				System.out.println(t.name());
+			}
 		return;
 	}
-	public static ArrayList<Terminals> lex (String program) {
+	public static ArrayList<Terminals> lex (String program) { //returns empty arraylist if error
 
 		ArrayList<Terminals> tList = new ArrayList<Terminals>();
 		//Scanner s = new Scanner(program); //scanner removes whitespace, making lexing a lot easier
 		Scanner s = new Scanner(System.in); //POSSIBLE TESTING LINE THAT TAKES IN STDIN DIRECTLY
 		while(s.hasNext()) {
+			
 			String line = s.next(); //now we scan this line
 			Boolean hadletters = false; //lettered terminals cannot be next to each other, this makes sure this does not happen
-			while(line.isEmpty()) { //whole line analysis
+			while(!line.isEmpty()) { //whole line analysis
+				
 				if(!Character.isLetter(line.charAt(0))) {
 						switch(line.charAt(0)) {//easy cases first
 						case '{':
@@ -47,14 +50,17 @@ public class Lexer {
 							break;
 						default:
 							//starts without letter but not a character here, error, grammar is invalid
-							return null;
+							tList.clear();
+							return tList;
 						}
 						hadletters = false;
 						line = line.substring(1); //strip the first character and carry on
 					}
 					else {
-						if(hadletters) //two lettered terminals in sequence, not allowed
-							return null;
+						if(hadletters) { //two lettered terminals in sequence, not allowed
+							tList.clear(); //error
+							return tList;
+						}
 						hadletters = true;
 						if(line.startsWith("if")) { //there is probably a better way to do this than chaining if statements, might fix this later, though the code is simple this way
 							tList.add(Terminals.ifStatement);
@@ -73,16 +79,17 @@ public class Lexer {
 							line = line.substring("true".length());
 						}
 						else if(line.startsWith("false")) {
-							tList.add(Terminals.trueStatement);
+							tList.add(Terminals.falseStatement);
 							line = line.substring("false".length());
 						}
 						else if(line.startsWith("System.out.println")) {
 							tList.add(Terminals.SOP);
 							line = line.substring("System.out.println".length());
 						}
-						else
-							return null; //error, terminal not found
-						
+						else {
+							tList.clear(); //error, terminal not found
+							return tList;
+						}
 					}
 			}
 		}
