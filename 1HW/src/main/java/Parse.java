@@ -12,7 +12,7 @@ public class Main {
 
 }
 
-//Making my own enum-like class for simplicity for tokens
+//Making my own enum-like class for simplicity for tokens, in hindsight this is not simple but eh.
 //	public enum ValidTokens {leftBrace, rightBrace, SOP, openParen, closeParen, semicolon, ifStatement, elseStatement, whileStatement, trueStatement, falseStatement, exclamation, S, L, E, nullable}
 public abstract class Token {
 
@@ -33,48 +33,36 @@ public abstract class Token {
 	public static class Terminal extends Token {
 		public Type type() {
 			return Type.Terminal;
-		}
+		}//a little boilerplatey
+		public final static Terminal leftBrace = new Terminal();
+		public final static Terminal rightBrace = new Terminal();
+		public final static Terminal SOP = new Terminal();
+		public final static Terminal openParen = new Terminal();
+		public final static Terminal closeParen = new Terminal();
+		public final static Terminal semicolon = new Terminal();
+		public final static Terminal ifStatement = new Terminal();
+		public final static Terminal elseStatement = new Terminal();
+		public final static Terminal whileStatement = new Terminal();
+		public final static Terminal trueStatement = new Terminal();
+		public final static Terminal falseStatement = new Terminal();
+		public final static Terminal exclamation = new Terminal();
+
 	}
 	public static class Nonterminal extends Token {
 		public Type type() {
 			return Type.Nonterminal;
 		}
+		public final static Nonterminal S = new Nonterminal();
+		public final static Nonterminal L = new Nonterminal();
+		public final static Nonterminal E = new Nonterminal();
 	}
 	public static class Nullable extends Token {
 		public Type type() {
 			return Type.Nullable;
 		}
+		public final static Nullable nullable = new Nullable();
 	}
 
-}
-
-public class T {
-	public final static Token.Terminal leftBrace, rightBrace, SOP, openParen, closeParen, semicolon, ifStatement, elseStatement, whileStatement, trueStatement, falseStatement, exclamation;
-	
-	public final static Token.Nonterminal S, L, E;
-	
-	public final static Token.Nullable nullable;
-	//now I need static initialization of all of these
-	static {
-		leftBrace = new Token.Terminal();
-		rightBrace = new Token.Terminal();
-		SOP = new Token.Terminal();
-		openParen = new Token.Terminal();
-		closeParen = new Token.Terminal();
-		semicolon = new Token.Terminal();
-		ifStatement = new Token.Terminal();
-		elseStatement = new Token.Terminal();
-		whileStatement = new Token.Terminal();
-		trueStatement = new Token.Terminal();
-		falseStatement = new Token.Terminal();
-		exclamation = new Token.Terminal();
-		S = new Token.Nonterminal();
-		L = new Token.Nonterminal();
-		E = new Token.Nonterminal();
-		nullable = new Token.Nullable();
-		
-	
-	}
 }
 
 public class Parser {
@@ -133,22 +121,22 @@ public class Lexer {
 				if(!Character.isLetter(line.charAt(0))) {
 						switch(line.charAt(0)) {//easy cases first
 						case '{':
-							tList.add(T.leftBrace);
+							tList.add(Token.Terminal.leftBrace);
 							break;
 						case '}':
-							tList.add(T.rightBrace);
+							tList.add(Token.Terminal.rightBrace);
 							break;
 						case '(':
-							tList.add(T.openParen);
+							tList.add(Token.Terminal.openParen);
 							break;
 						case ')':
-							tList.add(T.closeParen);
+							tList.add(Token.Terminal.closeParen);
 							break;
 						case ';':
-							tList.add(T.semicolon);
+							tList.add(Token.Terminal.semicolon);
 							break;
 						case '!':
-							tList.add(T.exclamation);
+							tList.add(Token.Terminal.exclamation);
 							break;
 						default:
 							//starts without letter but not a character here, error, grammar is invalid
@@ -165,27 +153,27 @@ public class Lexer {
 						}
 						hadletters = true;
 						if(line.startsWith("if")) { //there is probably a better way to do this than chaining if statements, might fix this later, though the code is simple this way
-							tList.add(T.ifStatement);
+							tList.add(Token.Terminal.ifStatement);
 							line = line.substring("if".length());
 						}
 						else if(line.startsWith("else")) {
-							tList.add(T.elseStatement);
+							tList.add(Token.Terminal.elseStatement);
 							line = line.substring("else".length());
 						}
 						else if(line.startsWith("while")) {
-							tList.add(T.whileStatement);
+							tList.add(Token.Terminal.whileStatement);
 							line = line.substring("while".length());
 						}
 						else if(line.startsWith("true")) {
-							tList.add(T.trueStatement);
+							tList.add(Token.Terminal.trueStatement);
 							line = line.substring("true".length());
 						}
 						else if(line.startsWith("false")) {
-							tList.add(T.falseStatement);
+							tList.add(Token.Terminal.falseStatement);
 							line = line.substring("false".length());
 						}
 						else if(line.startsWith("System.out.println")) {
-							tList.add(T.SOP);
+							tList.add(Token.Terminal.SOP);
 							line = line.substring("System.out.println".length());
 						}
 						else {
