@@ -18,40 +18,43 @@ public abstract class Token {
 
 	public enum Type {Terminal, Nonterminal, Nullable}
 	
-	private static int counter = 0; //global counter for enum discrimination purposes
+	//private static int counter = 0; //global counter for enum discrimination purposes
 
-	private final int value;
-	
+	//private final int value;
+	/*
 	public Token() {
 		value = counter;
 		counter++;
 	}
+*/
 	
 	public abstract Type type();
 	
-	public class Terminal extends Token {
+	public static class Terminal extends Token {
 		public Type type() {
 			return Type.Terminal;
 		}
 	}
-	public class Nonterminal extends Token {
+	public static class Nonterminal extends Token {
 		public Type type() {
 			return Type.Nonterminal;
 		}
 	}
-	public class Nullable extends Token {
+	public static class Nullable extends Token {
 		public Type type() {
 			return Type.Nullable;
 		}
 	}
 
-	public final static Terminal leftBrace, rightBrace, SOP, openParen, closeParen, semicolon, ifStatement, elseStatement, whileStatement, trueStatement, falseStatement, exclamation;
+}
 
-	public final static Nonterminal S, L, E;
-
-	public final static Nullable nullable;
+public class T {
+	public final static Token.Terminal leftBrace, rightBrace, SOP, openParen, closeParen, semicolon, ifStatement, elseStatement, whileStatement, trueStatement, falseStatement, exclamation;
+	
+	public final static Token.Nonterminal S, L, E;
+	
+	public final static Token.Nullable nullable;
 	//now I need static initialization of all of these
-
 	static {
 		leftBrace = new Token.Terminal();
 		rightBrace = new Token.Terminal();
@@ -69,10 +72,10 @@ public abstract class Token {
 		L = new Token.Nonterminal();
 		E = new Token.Nonterminal();
 		nullable = new Token.Nullable();
-	}
+		
 	
+	}
 }
-
 
 public class Parser {
 	/* private class TClass { //used for individual rules, there may be a better way to sort between terminals and nonterminals but eh
@@ -130,22 +133,22 @@ public class Lexer {
 				if(!Character.isLetter(line.charAt(0))) {
 						switch(line.charAt(0)) {//easy cases first
 						case '{':
-							tList.add(Token.leftBrace);
+							tList.add(T.leftBrace);
 							break;
 						case '}':
-							tList.add(Token.rightBrace);
+							tList.add(T.rightBrace);
 							break;
 						case '(':
-							tList.add(Token.openParen);
+							tList.add(T.openParen);
 							break;
 						case ')':
-							tList.add(Token.closeParen);
+							tList.add(T.closeParen);
 							break;
 						case ';':
-							tList.add(Token.semicolon);
+							tList.add(T.semicolon);
 							break;
 						case '!':
-							tList.add(Token.exclamation);
+							tList.add(T.exclamation);
 							break;
 						default:
 							//starts without letter but not a character here, error, grammar is invalid
@@ -162,27 +165,27 @@ public class Lexer {
 						}
 						hadletters = true;
 						if(line.startsWith("if")) { //there is probably a better way to do this than chaining if statements, might fix this later, though the code is simple this way
-							tList.add(Token.ifStatement);
+							tList.add(T.ifStatement);
 							line = line.substring("if".length());
 						}
 						else if(line.startsWith("else")) {
-							tList.add(Token.elseStatement);
+							tList.add(T.elseStatement);
 							line = line.substring("else".length());
 						}
 						else if(line.startsWith("while")) {
-							tList.add(Token.whileStatement);
+							tList.add(T.whileStatement);
 							line = line.substring("while".length());
 						}
 						else if(line.startsWith("true")) {
-							tList.add(Token.trueStatement);
+							tList.add(T.trueStatement);
 							line = line.substring("true".length());
 						}
 						else if(line.startsWith("false")) {
-							tList.add(Token.falseStatement);
+							tList.add(T.falseStatement);
 							line = line.substring("false".length());
 						}
 						else if(line.startsWith("System.out.println")) {
-							tList.add(Token.SOP);
+							tList.add(T.SOP);
 							line = line.substring("System.out.println".length());
 						}
 						else {
