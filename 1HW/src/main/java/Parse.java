@@ -12,9 +12,9 @@ import java.util.Collections;
 public class Parse {
 
 	public static class TPair {		//pair class for hashtable purposes
-		private Token.N N;
-		private Token.T T;
-		public TPair(Token.N NArg, Token.T TArg) {
+		private Tok.N N;
+		private Tok.T T;
+		public TPair(Tok.N NArg, Tok.T TArg) {
 			N = NArg;
 			T = TArg;
 		}
@@ -36,96 +36,96 @@ public class Parse {
 
 	public static void main(String[] args) {
 		
-		List<Token.T> programList = Lexer.lex();
+		List<Tok.T> programList = Lexer.lex();
 		if(programList.isEmpty()) {	//lexer failed to lex, grammar invalid
 			System.out.println("Parse error");
 			return;
 		}
 		//System.err.println("Lexed successfully");
-		Stack<Token.T> programStack = new Stack<Token.T>();
+		Stack<Tok.T> programStack = new Stack<Tok.T>();
 		Parse p = new Parse();
 		
 		p.InitializeGrammar();
 		Collections.reverse(programList);	//list to stack conversion is wrong way, need to reverse
 		programStack.addAll(programList);
 		
-		if(p.parse(programStack, Token.N.S) && programStack.isEmpty())
+		if(p.parse(programStack, Tok.N.S) && programStack.isEmpty())
 			System.out.println("Program parsed successfully");
 		else
 			System.out.println("Parse error");
 	}
 	
-	HashMap<TPair, List<Token>> grammar;
+	HashMap<TPair, List<Tok>> grammar;
 
 	public void InitializeGrammar() {
-		grammar = new HashMap<TPair, List<Token>>();
+		grammar = new HashMap<TPair, List<Tok>>();
 		
 
 		//S GRAMMARS
-		grammar.put(new TPair(Token.N.S, Token.T.leftBrace), Arrays.asList(
-						Token.T.leftBrace,
-						Token.N.L,
-						Token.T.rightBrace));
-		grammar.put(new TPair(Token.N.S, Token.T.SOP), Arrays.asList(
-						Token.T.SOP,
-						Token.T.openParen,
-						Token.N.E,
-						Token.T.closeParen,
-						Token.T.semicolon));
-		grammar.put(new TPair(Token.N.S, Token.T.ifStatement), Arrays.asList(
-						Token.T.ifStatement,
-						Token.T.openParen,
-						Token.N.E,
-						Token.T.closeParen,
-						Token.N.S,
-						Token.T.elseStatement,
-						Token.N.S));
-		grammar.put(new TPair(Token.N.S, Token.T.whileStatement), Arrays.asList(
-						Token.T.whileStatement,
-						Token.T.openParen,
-						Token.N.E,
-						Token.T.closeParen,
-						Token.N.S));
+		grammar.put(new TPair(Tok.N.S, Tok.T.leftBrace), Arrays.asList(
+						Tok.T.leftBrace,
+						Tok.N.L,
+						Tok.T.rightBrace));
+		grammar.put(new TPair(Tok.N.S, Tok.T.SOP), Arrays.asList(
+						Tok.T.SOP,
+						Tok.T.openParen,
+						Tok.N.E,
+						Tok.T.closeParen,
+						Tok.T.semicolon));
+		grammar.put(new TPair(Tok.N.S, Tok.T.ifStatement), Arrays.asList(
+						Tok.T.ifStatement,
+						Tok.T.openParen,
+						Tok.N.E,
+						Tok.T.closeParen,
+						Tok.N.S,
+						Tok.T.elseStatement,
+						Tok.N.S));
+		grammar.put(new TPair(Tok.N.S, Tok.T.whileStatement), Arrays.asList(
+						Tok.T.whileStatement,
+						Tok.T.openParen,
+						Tok.N.E,
+						Tok.T.closeParen,
+						Tok.N.S));
 		//L GRAMMARS
-		grammar.put(new TPair(Token.N.L, Token.T.leftBrace), Arrays.asList(
-						Token.N.S,
-						Token.N.L));
-		grammar.put(new TPair(Token.N.L, Token.T.rightBrace), Arrays.asList(
-						Token.Nullable.nullable));
-		grammar.put(new TPair(Token.N.L, Token.T.SOP), Arrays.asList(
-						Token.N.S,
-						Token.N.L));
-		grammar.put(new TPair(Token.N.L, Token.T.ifStatement), Arrays.asList(
-						Token.N.S,
-						Token.N.L));
-		grammar.put(new TPair(Token.N.L, Token.T.whileStatement), Arrays.asList(
-						Token.N.S,
-						Token.N.L));
+		grammar.put(new TPair(Tok.N.L, Tok.T.leftBrace), Arrays.asList(
+						Tok.N.S,
+						Tok.N.L));
+		grammar.put(new TPair(Tok.N.L, Tok.T.rightBrace), Arrays.asList(
+						Tok.Nullable.nullable));
+		grammar.put(new TPair(Tok.N.L, Tok.T.SOP), Arrays.asList(
+						Tok.N.S,
+						Tok.N.L));
+		grammar.put(new TPair(Tok.N.L, Tok.T.ifStatement), Arrays.asList(
+						Tok.N.S,
+						Tok.N.L));
+		grammar.put(new TPair(Tok.N.L, Tok.T.whileStatement), Arrays.asList(
+						Tok.N.S,
+						Tok.N.L));
 		//E GRAMMARS
-		grammar.put(new TPair(Token.N.E, Token.T.trueStatement), Arrays.asList(
-						Token.T.trueStatement));
-		grammar.put(new TPair(Token.N.E, Token.T.falseStatement), Arrays.asList(
-						Token.T.falseStatement));
-		grammar.put(new TPair(Token.N.E, Token.T.exclamation), Arrays.asList(
-						Token.T.exclamation,
-						Token.N.E));
+		grammar.put(new TPair(Tok.N.E, Tok.T.trueStatement), Arrays.asList(
+						Tok.T.trueStatement));
+		grammar.put(new TPair(Tok.N.E, Tok.T.falseStatement), Arrays.asList(
+						Tok.T.falseStatement));
+		grammar.put(new TPair(Tok.N.E, Tok.T.exclamation), Arrays.asList(
+						Tok.T.exclamation,
+						Tok.N.E));
 		//System.err.println("Grammar loaded");
 	}
 
-	public Boolean parse(Stack<Token.T> program, Token.N symbol) {
+	public Boolean parse(Stack<Tok.T> program, Tok.N symbol) {
 		//System.err.println("Parsing");
-		Token.T curTerm = program.peek();	//get first token
+		Tok.T curTerm = program.peek();	//get first token
 		if(curTerm == null) {
 			//System.err.println("Program returned null");
 			return false;
 		}
 		////System.err.println(curTerm.val);
-		List<Token> rule = grammar.get(new TPair(symbol, curTerm));	//get corresponding rule from parsetable
+		List<Tok> rule = grammar.get(new TPair(symbol, curTerm));	//get corresponding rule from parsetable
 		if(rule == null) {	//no rule, grammar is invalid, return false
 			//System.err.println("hashmap returned null");
 			return false;
 		}
-		for(Token current : rule) {
+		for(Tok current : rule) {
 			if(program.isEmpty())
 				return false;
 			curTerm = program.peek(); //get element from program
@@ -143,7 +143,7 @@ public class Parse {
 				break;
 			case Nonterminal:	//check maybe isnt needed
 				//System.err.println("Recursing");
-				if(!parse(program, (Token.N) current))	//casting for compiler purposes, checked type above
+				if(!parse(program, (Tok.N) current))	//casting for compiler purposes, checked type above
 					return false;	//parse didn't work, dont advance
 				//if worked, we have to grab the top of the stack again
 			}

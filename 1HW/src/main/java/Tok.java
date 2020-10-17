@@ -1,6 +1,8 @@
 
 //Making my own enum-like class for simplicity for tokens, in hindsight this is not simple but eh.
-public abstract class Token {
+
+//Apparently I cant name this class Token.java so I have to do Tok instead
+public abstract class Tok {
 
 	public enum Type {Terminal, Nonterminal, Nullable}
 	
@@ -8,14 +10,14 @@ public abstract class Token {
 
 	//private final int value;
 	/*
-	public Token() {
+	public Tok() {
 		value = counter;
 		counter++;
 	}
 	*/
 	private static int count = 0;
 	public final int val;
-	private Token() {
+	private Tok() {
 		val = count;
 		count++;
 	}
@@ -24,7 +26,7 @@ public abstract class Token {
 	
 	public abstract Type type();
 	
-	public static class T extends Token {
+	public static class T extends Tok {
 		public Type type() {
 			return Type.Terminal;
 		}//a little boilerplatey
@@ -42,7 +44,7 @@ public abstract class Token {
 		public final static T exclamation = new T();
 
 	}
-	public static class N extends Token {
+	public static class N extends Tok {
 		public Type type() {
 			return Type.Nonterminal;
 		}
@@ -50,7 +52,7 @@ public abstract class Token {
 		public final static N L = new N();
 		public final static N E = new N();
 	}
-	public static class Nullable extends Token {
+	public static class Nullable extends Tok {
 		public Type type() {
 			return Type.Nullable;
 		}
